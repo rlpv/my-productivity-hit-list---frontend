@@ -2,7 +2,8 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 function Home() {
   return (
     <div>
-      <h1>Hi</h1>
+      <h1>React Router DOM Setup</h1>
+      {/* comment */}
     </div>
   );
 }
