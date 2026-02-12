@@ -1,5 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap");
 @import "tailwindcss";
+
 @theme {
   --color-primary: #ffffff;
   --color-secondary: #ccd0ff;
+
+  /* Define the font variable here */
+  --font-indie: "Indie Flower", cursive;
+}
+
+/* Optional: If you want EVERYTHING to use this font by default */
+body {
+  font-family: var(--font-indie);
 }

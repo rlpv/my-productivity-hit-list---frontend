@@ -1,26 +1,25 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "../pages/Login";
-import Landingpage from "../pages/Landingpage";
-function Home() {
-  return (
-    <div>
-      <h1>React Router DOM Setup</h1>
-      {/* comment */}
-    </div>
-  );
-}
+import createaccount from "./pages/Createaccount";
+import Landingpage from "./pages/Landingpage";
+import login from "./pages/Login";
+import signup from "./pages/Signup";
+
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/",
-      Component: Home,
+      path: "/createaccount",
+      Component: createaccount,
     },
     {
       path: "/login",
-      Component: Login,
+      Component: login,
     },
     {
-      path: "/landing",
+      path: "/signup",
+      Component: signup,
+    },
+    {
+      path: "/",
       Component: Landingpage,
     },
   ]);
