@@ -1,9 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap");
 @import "tailwindcss";
+
 @theme {
   --color-primary: #ffffff;
   --color-secondary: #ccd0ff;
+
+  --font-indie: "Indie Flower", cursive;
 }
+
+body {
+  font-family: var(--font-indie);
+}
+
 .indie-flower {
-  font-family: 'Indie Flower', cursive;
+  font-family: "Indie Flower", cursive;
 }
