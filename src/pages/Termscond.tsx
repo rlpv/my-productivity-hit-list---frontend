@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import logomain from "../assets/logomain.png";
 import Button from "../components/buttons";
-import Concard from "./Concard";
+import Concard from "../components/Concard";
 
 export default function TermsCond() {
   const navigate = useNavigate();
-  
+
   const termsContent = `1. Acceptance of Terms
 
 By accessing or using the Productivity List system, users agree to comply with and be bound by these Terms and Conditions. If a user does not agree with any part of these terms, they should not use the system.
@@ -63,23 +63,29 @@ These Terms and Conditions are governed by applicable institutional or organizat
   return (
     <div className="bg-secondary flex flex-col items-center relative min-h-screen gap-4 sm:gap-8 px-4 pb-4">
       {/* Logo - smaller */}
-      <img src={logomain} alt="Logo" className="w-32 sm:w-40 h-32 sm:h-40 mt-4 sm:mt-8" />
+      <img
+        src={logomain}
+        alt="Logo"
+        className="w-32 sm:w-40 h-32 sm:h-40 mt-16 sm:mt-16"
+      />
 
       {/* White background rounded container */}
       <Concard>
-        <h4 className="text-black text-2xl sm:text-3xl font-indie font-bold text-center">Terms and Conditions</h4>
+        <h4 className="text-black text-2xl sm:text-3xl font-indie font-bold text-center">
+          Terms and Conditions
+        </h4>
 
         {/* Terms Content */}
-        <div className="bg-gray-100 rounded-xl p-3 sm:p-4 w-full h-48 sm:h-64 overflow-y-auto">
+        <div className="bg-primary rounded-xl p-3 sm:p-4 w-full h-99 sm:h-80 overflow-y-auto">
           <p className="text-black font-indie text-xs sm:text-sm leading-relaxed text-center whitespace-pre-line">
             {termsContent}
           </p>
         </div>
 
         {/* Accept Button */}
-        <Button 
-          type="button" 
-          size="md" 
+        <Button
+          type="button"
+          size="md"
           variant="primary"
           onClick={() => navigate("/createaccount")}
         >

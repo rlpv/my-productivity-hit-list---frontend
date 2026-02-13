@@ -1,15 +1,21 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Addtask from "./pages/Addtask";
 import createaccount from "./pages/Createaccount";
+import ForgotPass from "./pages/Forgotpass";
+import Homepage from "./pages/Homepage";
 import Landingpage from "./pages/Landingpage";
 import login from "./pages/Login";
+import SetNewPass from "./pages/Setnewpass";
 import signup from "./pages/Signup";
-import ForgotPass from "./pages/Forgotpass";
-import VerifyCode from "./pages/Verifycode";
 import TermsCond from "./pages/Termscond";
-import Homepage from "./pages/Homepage";
+import VerifyCode from "./pages/Verifycode";
 
 function App() {
   const router = createBrowserRouter([
+    {
+      path: "/addtask",
+      Component: Addtask,
+    },
     {
       path: "/homepage",
       Component: Homepage,
@@ -21,6 +27,10 @@ function App() {
     {
       path: "/verifycode",
       Component: VerifyCode,
+    },
+    {
+      path: "/setnewpass",
+      Component: SetNewPass,
     },
     {
       path: "/forgotpass",

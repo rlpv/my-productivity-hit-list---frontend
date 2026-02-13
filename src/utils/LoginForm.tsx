@@ -1,15 +1,15 @@
-import { FaLock, FaUser } from "react-icons/fa";
-import InputField from "../components/InputField";
+import { FaEnvelope, FaLock } from "react-icons/fa";
 import Button from "../components/buttons";
+import InputField from "../components/InputField";
 import SocialIcons from "../components/SocialIcons";
 
 interface LoginFormProps {
   formData: {
-    username: string;
+    email: string;
     password: string;
   };
   errors: {
-    username: string;
+    email: string;
     password: string;
   };
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -17,22 +17,28 @@ interface LoginFormProps {
   onForgotPassword: () => void;
 }
 
-export default function LoginForm({ formData, errors, onChange, onSubmit, onForgotPassword }: LoginFormProps) {
+export default function LoginForm({
+  formData,
+  errors,
+  onChange,
+  onSubmit,
+  onForgotPassword,
+}: LoginFormProps) {
   return (
     <form onSubmit={onSubmit} className="flex flex-col items-center gap-6">
-      {/* Username Field */}
+      {/* Email Field */}
       <InputField
         icon={
           <span className="text-gray-600">
-            <FaUser />
+            <FaEnvelope />
           </span>
         }
-        type="text"
-        name="username"
-        placeholder="Username"
-        value={formData.username}
+        type="email"
+        name="email"
+        placeholder="Email"
+        value={formData.email}
         onChange={onChange}
-        error={errors.username}
+        error={errors.email}
       />
 
       {/* Password Field */}

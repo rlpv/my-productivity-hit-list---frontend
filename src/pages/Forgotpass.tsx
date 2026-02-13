@@ -2,9 +2,9 @@ import { useState } from "react";
 import { FaEnvelope } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import logomain from "../assets/logomain.png";
-import InputField from "../components/InputField";
 import Button from "../components/buttons";
-import Concard from "./Concard";
+import Concard from "../components/Concard";
+import InputField from "../components/InputField";
 
 export default function ForgotPass() {
   const navigate = useNavigate();
@@ -32,11 +32,17 @@ export default function ForgotPass() {
   return (
     <div className="bg-secondary flex flex-col items-center relative min-h-screen gap-4 sm:gap-8 px-4">
       {/* Logo */}
-      <img src={logomain} alt="Logo" className="w-48 sm:w-65 h-48 sm:h-65 mt-20 sm:mt-30" />
+      <img
+        src={logomain}
+        alt="Logo"
+        className="w-48 sm:w-65 h-48 sm:h-65 mt-45 sm:mt-30"
+      />
 
       {/* White background rounded container */}
       <Concard>
-        <h4 className="text-black text-3xl sm:text-4xl font-indie font-bold">Forgot Password</h4>
+        <h4 className="text-black text-3xl sm:text-4xl font-indie font-bold">
+          Forgot Password
+        </h4>
 
         {!submitted ? (
           <form
@@ -68,8 +74,8 @@ export default function ForgotPass() {
             <p className="text-black font-indie text-center">
               Password reset link has been sent to your email.
             </p>
-            <Button 
-              size="md" 
+            <Button
+              size="md"
               variant="primary"
               onClick={() => setSubmitted(false)}
             >

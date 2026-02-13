@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import logomain from "../assets/logomain.png";
 import Button from "../components/buttons";
-import Concard from "./Concard";
+import Concard from "../components/Concard";
 
 export default function VerifyCode() {
   const navigate = useNavigate();
@@ -31,7 +31,10 @@ export default function VerifyCode() {
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     // Move to previous input on backspace if current is empty
     if (e.key === "Backspace" && otp[index] === "" && index > 0) {
       inputRefs.current[index - 1]?.focus();
@@ -41,25 +44,31 @@ export default function VerifyCode() {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const otpCode = otp.join("");
-    
+
     if (otpCode.length !== 4) {
       setError("Please enter all 4 digits");
       return;
     }
 
     console.log("OTP Code:", otpCode);
-    // Navigate to login after successful verification
-    navigate("/login");
+    // Navigate to setnewpass after successful verification
+    navigate("/setnewpass");
   };
 
   return (
     <div className="bg-secondary flex flex-col items-center relative min-h-screen gap-4 sm:gap-8 px-4">
       {/* Logo */}
-      <img src={logomain} alt="Logo" className="w-48 sm:w-65 h-48 sm:h-65 mt-20 sm:mt-30" />
+      <img
+        src={logomain}
+        alt="Logo"
+        className="w-48 sm:w-65 h-48 sm:h-65 mt-45 sm:mt-30"
+      />
 
       {/* White background rounded container */}
       <Concard>
-        <h4 className="text-black text-3xl sm:text-4xl font-indie font-bold">Verify Code</h4>
+        <h4 className="text-black text-3xl sm:text-4xl font-indie font-bold">
+          Verify Code
+        </h4>
 
         <p className="text-black font-indie text-center">
           Enter the 4-digit code sent to your email
@@ -74,7 +83,9 @@ export default function VerifyCode() {
             {otp.map((digit, index) => (
               <input
                 key={index}
-                ref={(el) => { inputRefs.current[index] = el; }}
+                ref={(el) => {
+                  inputRefs.current[index] = el;
+                }}
                 type="text"
                 maxLength={1}
                 value={digit}
@@ -85,9 +96,7 @@ export default function VerifyCode() {
             ))}
           </div>
 
-          {error && (
-            <p className="text-red-500 font-indie text-sm">{error}</p>
-          )}
+          {error && <p className="text-red-500 font-indie text-sm">{error}</p>}
 
           {/* Enter Button */}
           <Button type="submit" size="md" variant="primary">

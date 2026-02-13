@@ -1,6 +1,6 @@
-import { FaLock, FaUser } from "react-icons/fa";
-import InputField from "../components/InputField";
+import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 import Button from "../components/buttons";
+import InputField from "../components/InputField";
 import SocialIcons from "../components/SocialIcons";
 
 interface CreateaccountFormProps {
@@ -23,14 +23,14 @@ interface CreateaccountFormProps {
   onTermsClick: () => void;
 }
 
-export default function CreateaccountForm({ 
-  formData, 
-  errors, 
+export default function CreateaccountForm({
+  formData,
+  errors,
   termsAccepted,
-  onChange, 
+  onChange,
   onTermsChange,
   onSubmit,
-  onTermsClick
+  onTermsClick,
 }: CreateaccountFormProps) {
   return (
     <form onSubmit={onSubmit} className="flex flex-col items-center gap-6">
@@ -47,6 +47,21 @@ export default function CreateaccountForm({
         value={formData.username}
         onChange={onChange}
         error={errors.username}
+      />
+
+      {/* Email Field */}
+      <InputField
+        icon={
+          <span className="text-gray-600">
+            <FaEnvelope />
+          </span>
+        }
+        type="email"
+        name="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={onChange}
+        error={errors.email}
       />
 
       {/* Password Field */}
@@ -88,9 +103,12 @@ export default function CreateaccountForm({
           onChange={(e) => onTermsChange(e.target.checked)}
           className="w-4 h-4 accent-black cursor-pointer"
         />
-        <label htmlFor="terms" className="text-black font-indie text-sm cursor-pointer">
+        <label
+          htmlFor="terms"
+          className="text-black font-indie text-sm cursor-pointer"
+        >
           I agree to the{" "}
-          <a 
+          <a
             onClick={onTermsClick}
             className="underline hover:no-underline cursor-pointer"
           >
@@ -104,8 +122,10 @@ export default function CreateaccountForm({
         Enter
       </Button>
 
-      <h4 className="text-black font-indie">or continue with</h4>
-
+      <h4 className="text-black font-indie">
+        <span className="block text-center">or</span>
+        <span className="block text-center">continue with</span>
+      </h4>
       {/* Social Media Icons */}
       <SocialIcons />
     </form>
