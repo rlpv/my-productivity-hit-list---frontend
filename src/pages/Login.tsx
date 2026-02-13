@@ -32,6 +32,8 @@ export default function login() {
     setErrors(newErrors);
     if (!newErrors.username && !newErrors.password) {
       console.log("Login attempt:", formData);
+      // Navigate to homepage on successful login
+      navigate("/homepage");
     }
   };
 

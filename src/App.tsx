@@ -6,9 +6,14 @@ import signup from "./pages/Signup";
 import ForgotPass from "./pages/Forgotpass";
 import VerifyCode from "./pages/Verifycode";
 import TermsCond from "./pages/Termscond";
+import Homepage from "./pages/Homepage";
 
 function App() {
   const router = createBrowserRouter([
+    {
+      path: "/homepage",
+      Component: Homepage,
+    },
     {
       path: "/termscond",
       Component: TermsCond,
