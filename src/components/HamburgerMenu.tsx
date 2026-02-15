@@ -1,4 +1,4 @@
-import { FaLock, FaSignOutAlt, FaTimes, FaUser } from "react-icons/fa";
+import { FaLock, FaSignOutAlt, FaTimes, FaUserCircle } from "react-icons/fa"; // Changed to FaUserCircle for a closer match
 import { useNavigate } from "react-router-dom";
 
 interface HamburgerMenuProps {
@@ -18,69 +18,73 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
 
   const handleLogout = () => {
     onClose();
-    // Clear any stored tokens/session data
     navigate("/login");
   };
 
   return (
-    // Backdrop
+    // Backdrop - Always full screen
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 z-40"
+      className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center md:block"
       onClick={onClose}
     >
-      {/* Modal */}
+      {/* Modal / Sidebar Container */}
       <div
-        className="fixed right-0 top-0 h-full w-64 bg-secondary z-50 shadow-lg"
+        className={`
+          relative z-50 shadow-2xl transition-all duration-300
+          /* Mobile View: Centered Card */
+          w-[90%] max-w-[400px] aspect-square bg-[#D9D9FB] rounded-[40px] border-[6px] border-black flex flex-col items-center justify-between p-10
+          /* Big Screen: Right Sidebar Drawer */
+          md:fixed md:right-0 md:top-0 md:h-full md:w-64 md:bg-secondary md:rounded-none md:border-0 md:flex-col md:justify-start md:p-4
+        `}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header with close button */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-300">
+        {/* Header - Hidden on mobile card, shown on sidebar */}
+        <div className="hidden md:flex items-center justify-between w-full p-4 border-b border-gray-300 mb-4">
           <div className="flex items-center gap-3">
-            <span className="text-2xl">
-              <FaUser />
-            </span>
-            <span className="font-semibold">Menu</span>
+             <FaUserCircle className="text-2xl" />
+            <span className="font-semibold text-black">Menu</span>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
-          >
+          <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-lg">
             <FaTimes size={20} />
           </button>
         </div>
 
-        {/* Menu Items */}
-        <div className="p-4 flex flex-col gap-4">
-          {/* User Icon Display */}
-          <div className="flex flex-col items-center gap-2 py-4">
-            <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">
-              <span className="text-3xl text-gray-600">
-                <FaUser />
-              </span>
-            </div>
-            <span className="text-sm text-gray-600">User</span>
-          </div>
+        {/* Profile Icon - Large on mobile, standard on sidebar */}
+        <div className="flex flex-col items-center justify-center flex-grow md:flex-grow-0">
+          <FaUserCircle className="text-[150px] md:text-6xl text-black" />
+        </div>
 
+        {/* Buttons Container */}
+        <div className="flex flex-row justify-center gap-4 w-full md:flex-col md:mt-8">
+          
           {/* Change Password Button */}
           <button
             onClick={handleChangePassword}
-            className="flex items-center gap-3 p-3 hover:bg-gray-200 rounded-lg transition-colors w-full text-left"
+            className="
+              bg-[#4FA3FF] border-2 border-black rounded-2xl px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]
+              text-black font-bold text-center leading-tight transition-transform active:translate-y-1
+              md:bg-transparent md:border-0 md:shadow-none md:flex md:items-center md:gap-3 md:text-left md:font-normal
+            "
           >
-            <span className="text-lg">
-              <FaLock />
+            <span className="md:hidden">Change<br/>Password</span>
+            <span className="hidden md:flex items-center gap-3">
+               <FaLock /> Change Password
             </span>
-            <span>Change Password</span>
           </button>
 
           {/* Logout Button */}
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 p-3 hover:bg-gray-200 rounded-lg transition-colors w-full text-left text-red-600"
+            className="
+              bg-[#FF6B6B] border-2 border-black rounded-2xl px-8 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]
+              text-black font-bold transition-transform active:translate-y-1
+              md:bg-transparent md:border-0 md:shadow-none md:flex md:items-center md:gap-3 md:text-left md:font-normal md:text-red-600
+            "
           >
-            <span className="text-lg">
-              <FaSignOutAlt />
+            <span className="md:hidden text-lg">Logout</span>
+            <span className="hidden md:flex items-center gap-3">
+               <FaSignOutAlt /> Logout
             </span>
-            <span>Logout</span>
           </button>
         </div>
       </div>

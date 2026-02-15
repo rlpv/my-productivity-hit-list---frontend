@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Addtask from "./pages/Addtask";
+import Edittask from "./pages/Edittask";
 import createaccount from "./pages/Createaccount";
 import ForgotPass from "./pages/Forgotpass";
 import Homepage from "./pages/Homepage";
@@ -15,6 +16,10 @@ function App() {
     {
       path: "/addtask",
       Component: Addtask,
+    },
+    {
+      path: "/edittask/:id",
+      Component: Edittask,
     },
     {
       path: "/homepage",
