@@ -4,7 +4,7 @@ import Button from "../components/buttons";
 import Concard from "../components/Concard";
 import SocialIcons from "../components/SocialIcons";
 
-export default function signup() {
+export default function Signup() {
   const navigate = useNavigate();
 
   return (

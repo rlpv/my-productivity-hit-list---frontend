@@ -1,4 +1,4 @@
-import { FaTimes, FaPen, FaTrash } from "react-icons/fa";
+import { FaPencilAlt, FaReply, FaTrashAlt } from "react-icons/fa";
 
 interface TaskModalProps {
   task: {
@@ -24,52 +24,66 @@ export default function TaskModal({
   if (!isOpen || !task) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white border-2 border-black rounded-xl p-6 w-full max-w-md mx-4 relative">
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-        >
-          <FaTimes size={20} />
-        </button>
-
-        {/* Task Details */}
-        <div className="mb-6">
-          <h3
-            className={`font-indie text-2xl ${
-              task.completed ? "line-through text-gray-500" : ""
-            }`}
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      {/* Main Lavender Container */}
+      <div className="bg-[#D6DFFF] border-4 border-black rounded-[40px] w-full max-w-sm flex flex-col shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-h-[90vh]">
+        {/* Header - Fixed */}
+        <div className="p-6 pb-2 flex items-center justify-between">
+          <button
+            onClick={onClose}
+            className="w-12 h-12 bg-primary rounded-full border-[3px] border-black flex items-center justify-center hover:bg-gray-100 transition-all active:scale-90"
           >
-            {task.title}
-          </h3>
-
-          {task.description && (
-            <p className="text-gray-600 mt-3 whitespace-pre-wrap">
-              {task.description}
-            </p>
-          )}
-
-          <p className="text-gray-400 text-sm mt-4">
-            Created: {new Date(task.createdAt).toLocaleDateString()}
-          </p>
+            <span className="transform -scale-x-100">
+              <FaReply size={20} />
+            </span>
+          </button>
+          <h2 className="text-2xl font-bold font-indie">Task Details</h2>
+          <div className="w-12" /> {/* Spacer for centering */}
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex gap-3">
+        {/* Content Area - Scrollable to prevent overlap */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+          {/* Title Box */}
+          <div className="space-y-1">
+            <p className="font-indie font-bold text-lg ml-2">Task title :</p>
+            <div className="bg-primary border-[3px] border-black rounded-[20px] p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
+              <h3 className="text-xl font-bold font-indie wrap-break-word leading-tight">
+                {task.title}
+              </h3>
+            </div>
+          </div>
+
+          {/* Description Box */}
+          {task.description && (
+            <div className="space-y-1">
+              <p className="font-indie font-bold text-lg ml-2">
+                Task description :
+              </p>
+              <div className="bg-primary border-[3px] border-black rounded-[20px] p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] min-h-30">
+                <p className="text-lg font-indie wrap-break-word leading-relaxed whitespace-pre-wrap text-center">
+                  {task.description}
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Footer Actions - Fixed */}
+        <div className="p-6 pt-2 flex justify-center gap-8">
           <button
             onClick={() => onEdit(task._id)}
-            className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2"
+            className="w-16 h-16 bg-[#66BB84] rounded-full border-[3px] border-black flex items-center justify-center
+             shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all active:scale-90"
           >
-            <FaPen size={16} />
-            Edit
+            <FaPencilAlt size={24} />
           </button>
+
           <button
             onClick={() => onDelete(task._id)}
-            className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 flex items-center justify-center gap-2"
+            className="w-16 h-16 bg-[#FF6B6B] rounded-full border-[3px] border-black flex items-center justify-center
+             shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all active:scale-90"
           >
-            <FaTrash size={16} />
-            Delete
+            <FaTrashAlt size={24} />
           </button>
         </div>
       </div>

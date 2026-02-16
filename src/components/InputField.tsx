@@ -24,11 +24,21 @@ const InputField: React.FC<InputFieldProps> = ({
 
   return (
     <div className="w-full max-w-65 border border-black bg-gray-100 rounded-xl flex items-center px-3 sm:px-4 py-2 sm:py-3 my-2 sm:my-4 mx-auto">
+      <style>{`
+        input[type="password"]::-webkit-credentials-auto-fill-button {
+          display: none !important;
+        }
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-webkit-outer-spin-button,
+        input[type="password"]::-webkit-inner-spin-button {
+          display: none !important;
+        }
+      `}</style>
       {icon && <span className="mr-2 sm:mr-3">{icon}</span>}
       <input
         type={inputType}
         placeholder={displayPlaceholder}
-        className={`w-full text-sm sm:text-base bg-transparent outline-none ${error ? 'placeholder-red-500 text-red-500' : ''}`}
+        className={`w-full text-sm sm:text-base bg-transparent outline-none ${error ? "placeholder-red-500 text-red-500" : ""}`}
         {...rest}
       />
       {isPassword && (

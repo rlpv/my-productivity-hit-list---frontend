@@ -13,7 +13,6 @@ interface TaskListProps {
   isLoading: boolean;
   onTaskClick: (task: Task) => void;
   onToggleComplete: (task: Task) => void;
-  onDeleteTask: (taskId: string) => void;
 }
 
 export default function TaskList({
@@ -21,7 +20,6 @@ export default function TaskList({
   isLoading,
   onTaskClick,
   onToggleComplete,
-  onDeleteTask,
 }: TaskListProps) {
   if (isLoading) {
     return <p className="text-center">Loading tasks...</p>;
@@ -39,7 +37,6 @@ export default function TaskList({
           task={task}
           onClick={() => onTaskClick(task)}
           onToggleComplete={() => onToggleComplete(task)}
-          onDelete={() => onDeleteTask(task._id)}
         />
       ))}
     </div>

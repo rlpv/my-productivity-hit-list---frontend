@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import logomain from "../assets/logomain.png";
 import Button from "../components/buttons";
 import Concard from "../components/Concard";
+import SuccessModal from "../components/SuccessModal";
 
 export default function SetNewPass() {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -33,9 +35,8 @@ export default function SetNewPass() {
       return;
     }
 
-    console.log("New Password:", password);
-    // Navigate to login after successful password reset
-    navigate("/login");
+    // Show success modal instead of immediately navigating
+    setShowSuccessModal(true);
   };
 
   return (
@@ -97,6 +98,17 @@ export default function SetNewPass() {
           </Button>
         </form>
       </Concard>
+
+      {/* Success Modal for password reset */}
+      <SuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => {
+          setShowSuccessModal(false);
+          navigate("/login");
+        }}
+        title="Password Reset!"
+        message="Your password has been reset successfully. Please log in with your new password."
+      />
     </div>
   );
 }

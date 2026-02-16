@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { FaReply } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import logomain from "../assets/logomain.png";
 import axiosInstance from "../axios/axios-instance";
 import Concard from "../components/Concard";
+import SuccessModal from "../components/SuccessModal";
 import CreateaccountForm from "../utils/CreateaccountForm";
 
 export default function CreateAccount() {
@@ -22,6 +24,7 @@ export default function CreateAccount() {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -74,8 +77,8 @@ export default function CreateAccount() {
           password: formData.password,
         });
 
-        // Redirect to login page after successful registration
-        navigate("/login");
+        // Show success modal
+        setShowSuccessModal(true);
       } catch (error) {
         // Type guard to check if it's an Axios error with response data
         const axiosError = error as {
@@ -112,6 +115,17 @@ export default function CreateAccount() {
 
   return (
     <div className="bg-secondary flex flex-col items-center relative min-h-screen gap-4 sm:gap-8 px-4">
+      <button
+        onClick={() => navigate("/signup")}
+        className="absolute top-4 right-4 w-12 h-12 bg-secondary
+               rounded-full border-[3px] border-black flex items-center justify-center
+                hover:bg-gray-100 transition-all active:scale-90"
+      >
+        <span className="transform -scale-x-100">
+          <FaReply size={20} />
+        </span>
+      </button>
+
       {/* Logo */}
       <img
         src={logomain}
@@ -147,6 +161,17 @@ export default function CreateAccount() {
           </p>
         )}
       </Concard>
+
+      {/* Success Modal for account creation */}
+      <SuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => {
+          setShowSuccessModal(false);
+          navigate("/login");
+        }}
+        title="Account Created!"
+        message="Your account has been created successfully. Please log in to continue."
+      />
     </div>
   );
 }

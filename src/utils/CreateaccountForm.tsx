@@ -96,25 +96,22 @@ export default function CreateaccountForm({
 
       {/* Terms and Conditions */}
       <div className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          id="terms"
-          checked={termsAccepted}
-          onChange={(e) => onTermsChange(e.target.checked)}
-          className="w-4 h-4 accent-black cursor-pointer"
-        />
-        <label
-          htmlFor="terms"
-          className="text-black font-indie text-sm cursor-pointer"
-        >
-          I agree to the{" "}
-          <a
-            onClick={onTermsClick}
-            className="underline hover:no-underline cursor-pointer"
-          >
-            Terms and Conditions
-          </a>
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            id="terms"
+            checked={termsAccepted}
+            onChange={(e) => onTermsChange(e.target.checked)}
+            className="w-4 h-4 accent-black cursor-pointer"
+          />
+          <span className="text-black font-indie text-sm">I agree to the </span>
         </label>
+        <a
+          onClick={onTermsClick}
+          className="underline hover:no-underline cursor-pointer text-sm font-indie text-black"
+        >
+          Terms and Conditions
+        </a>
       </div>
 
       {/* Create Account Button */}

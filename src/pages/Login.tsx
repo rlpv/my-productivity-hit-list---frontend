@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaReply } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import logomain from "../assets/logomain.png";
 import axiosInstance from "../axios/axios-instance";
@@ -83,6 +84,18 @@ export default function Login() {
 
   return (
     <div className="bg-secondary flex flex-col items-center relative min-h-screen gap-4 sm:gap-8 px-4">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/signup")}
+        className="absolute top-4 right-4 w-12 h-12 bg-secondary
+         rounded-full border-[3px] border-black flex items-center justify-center
+          hover:bg-gray-100 transition-all active:scale-90"
+      >
+        <span className="transform -scale-x-100">
+          <FaReply size={20} />
+        </span>
+      </button>
+
       {/* Logo */}
       <img
         src={logomain}

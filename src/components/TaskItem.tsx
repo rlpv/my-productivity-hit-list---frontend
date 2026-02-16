@@ -1,5 +1,3 @@
-import { FaPen, FaTrash } from "react-icons/fa";
-
 interface TaskItemProps {
   task: {
     _id: string;
@@ -10,53 +8,53 @@ interface TaskItemProps {
   };
   onClick: () => void;
   onToggleComplete: () => void;
-  onDelete: () => void;
 }
 
 export default function TaskItem({
   task,
   onClick,
   onToggleComplete,
-  onDelete,
 }: TaskItemProps) {
+  // Logic to limit title to 23 characters including spaces
+  const truncatedTitle =
+    task.title.length > 23 ? task.title.substring(0, 23) + "...." : task.title;
+
   return (
     <div
-      className={`bg-white border-2 border-black rounded-xl p-3 cursor-pointer hover:bg-gray-50 ${
-        task.completed ? "opacity-60" : ""
+      className={`relative flex items-center gap-3 bg-[#D6DFFF] border-2 border-black rounded-[25px] p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-4 ${
+        task.completed ? "opacity-70" : ""
       }`}
     >
-      <div className="flex items-center justify-between">
-        <div 
-          className="flex items-center gap-2 flex-1"
-          onClick={onClick}
-        >
-          <input
-            type="checkbox"
-            checked={task.completed}
-            onChange={(e) => {
-              e.stopPropagation();
-              onToggleComplete();
-            }}
-            className="w-5 h-5 accent-black cursor-pointer"
-          />
-          <span
-            className={`font-indie text-lg ${
-              task.completed ? "line-through text-gray-500" : ""
-            }`}
-          >
-            {task.title}
-          </span>
-        </div>
-        <button
-          onClick={(e) => {
+      {/* 1. The Checkbox Container */}
+      <div className="flex items-center justify-center pl-1">
+        <input
+          type="checkbox"
+          checked={task.completed}
+          onChange={(e) => {
             e.stopPropagation();
-            onDelete();
+            onToggleComplete();
           }}
-          className="p-2 text-red-600 hover:bg-red-100 rounded-lg"
-          title="Delete Task"
+          className="w-6 h-6 border-2 border-black rounded cursor-pointer accent-blue-600"
+        />
+      </div>
+
+      {/* 2. The Inner White Text Box */}
+      <div
+        onClick={() => !task.completed && onClick()} // Only trigger onClick if NOT completed
+        className={`flex-1 bg-white border-2 border-black rounded-[18px] px-5 py-2 flex items-center min-h-12.5 overflow-hidden transition-transform 
+          ${
+            task.completed
+              ? "cursor-default pointer-events-none" // Disable interaction when checked
+              : "cursor-pointer hover:bg-gray-50 active:scale-[0.98]"
+          }`}
+      >
+        <span
+          className={`font-indie text-xl text-black leading-tight ${
+            task.completed ? "line-through text-gray-400" : ""
+          }`}
         >
-          <FaTrash size={16} />
-        </button>
+          {truncatedTitle}
+        </span>
       </div>
     </div>
   );
