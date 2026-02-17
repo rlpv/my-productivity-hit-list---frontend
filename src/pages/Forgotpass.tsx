@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { FaEnvelope, FaReply } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -10,24 +11,50 @@ import InputField from "../components/InputField";
 export default function ForgotPass() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalType, setModalType] = useState<"success" | "error">("success");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-    if (error) {
-      setError("");
+    if (emailError) {
+      setEmailError("");
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {
-      setError("Email is required");
+      setEmailError("Email is required");
       return;
     }
-    // Show modal with verification code message
-    setShowModal(true);
+
+    setIsLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/users/forgot-password",
+        { email },
+      );
+
+      if (response.data.success) {
+        // Store email for verification page
+        localStorage.setItem("forgotPasswordEmail", email);
+        setModalMessage(response.data.message);
+        setModalType("success");
+        setShowModal(true);
+      }
+    } catch (err: unknown) {
+      const errorObj = err as { response?: { data?: { message?: string } } };
+      const message =
+        errorObj.response?.data?.message || "Something went wrong";
+      setModalMessage(message);
+      setModalType("error");
+      setShowModal(true);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleModalClose = () => {
@@ -77,12 +104,17 @@ export default function ForgotPass() {
             placeholder="Email"
             value={email}
             onChange={handleChange}
-            error={error}
+            error={emailError}
           />
 
           {/* Enter Button */}
-          <Button type="submit" size="md" variant="primary">
-            Enter
+          <Button
+            type="submit"
+            size="md"
+            variant="primary"
+            disabled={isLoading}
+          >
+            {isLoading ? "Sending..." : "Enter"}
           </Button>
         </form>
       </Concard>
@@ -91,8 +123,8 @@ export default function ForgotPass() {
       <AlertModal
         isOpen={showModal}
         onClose={handleModalClose}
-        message="Your verification code has been sent to your email."
-        type="success"
+        message={modalMessage}
+        type={modalType}
       />
     </div>
   );

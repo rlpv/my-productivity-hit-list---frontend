@@ -21,6 +21,7 @@ interface CreateaccountFormProps {
   onTermsChange: (checked: boolean) => void;
   onSubmit: (e: React.FormEvent) => void;
   onTermsClick: () => void;
+  isLoading?: boolean;
 }
 
 export default function CreateaccountForm({
@@ -31,6 +32,7 @@ export default function CreateaccountForm({
   onTermsChange,
   onSubmit,
   onTermsClick,
+  isLoading = false,
 }: CreateaccountFormProps) {
   return (
     <form onSubmit={onSubmit} className="flex flex-col items-center gap-6">
@@ -115,7 +117,7 @@ export default function CreateaccountForm({
       </div>
 
       {/* Create Account Button */}
-      <Button type="submit" size="md" variant="primary">
+      <Button type="submit" size="md" variant="primary" isLoading={isLoading}>
         Enter
       </Button>
 

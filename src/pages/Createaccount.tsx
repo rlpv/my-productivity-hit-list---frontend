@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import logomain from "../assets/logomain.png";
 import axiosInstance from "../axios/axios-instance";
 import Concard from "../components/Concard";
-import SuccessModal from "../components/SuccessModal";
+import { useToast } from "../components/Toast";
 import CreateaccountForm from "../utils/CreateaccountForm";
 
 export default function CreateAccount() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -23,8 +24,6 @@ export default function CreateAccount() {
   });
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [apiError, setApiError] = useState("");
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -59,7 +58,6 @@ export default function CreateAccount() {
     };
 
     setErrors(newErrors);
-    setApiError("");
 
     // If no errors, proceed with account creation
     if (
@@ -77,8 +75,9 @@ export default function CreateAccount() {
           password: formData.password,
         });
 
-        // Show success modal
-        setShowSuccessModal(true);
+        // Show success toast
+        showToast("Account created successfully! Please log in.", "success");
+        navigate("/login");
       } catch (error) {
         // Type guard to check if it's an Axios error with response data
         const axiosError = error as {
@@ -102,7 +101,7 @@ export default function CreateAccount() {
             "Unable to connect to server. Please check if the backend is running.";
         }
 
-        setApiError(errorMessage);
+        showToast(errorMessage, "error");
       } finally {
         setIsLoading(false);
       }
@@ -139,11 +138,6 @@ export default function CreateAccount() {
           Create Account
         </h4>
 
-        {/* API Error Message */}
-        {apiError && (
-          <p className="text-red-500 text-sm mb-4 text-center">{apiError}</p>
-        )}
-
         <CreateaccountForm
           formData={formData}
           errors={errors}
@@ -152,26 +146,9 @@ export default function CreateAccount() {
           onTermsChange={handleTermsChange}
           onSubmit={handleSubmit}
           onTermsClick={handleTermsClick}
+          isLoading={isLoading}
         />
-
-        {/* Loading indicator */}
-        {isLoading && (
-          <p className="text-black text-sm mt-4 text-center">
-            Creating account...
-          </p>
-        )}
       </Concard>
-
-      {/* Success Modal for account creation */}
-      <SuccessModal
-        isOpen={showSuccessModal}
-        onClose={() => {
-          setShowSuccessModal(false);
-          navigate("/login");
-        }}
-        title="Account Created!"
-        message="Your account has been created successfully. Please log in to continue."
-      />
     </div>
   );
 }

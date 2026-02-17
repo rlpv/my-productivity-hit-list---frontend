@@ -133,17 +133,11 @@ const TaskForm: React.FC<TaskFormProps> = ({
       <div className="flex justify-center pt-4">
         <Button
           type="submit"
-          disabled={isLoading}
+          isLoading={isLoading}
           className="font-indie text-xl px-8 py-2 border-2 border-black rounded-full bg-[#D6DFFF]
            shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-none transition-all"
         >
-          {isLoading
-            ? isEdit
-              ? "Editing..."
-              : "Adding..."
-            : isEdit
-              ? "Edit Task"
-              : "Add Task"}
+          {isEdit ? "Edit Task" : "Add Task"}
         </Button>
       </div>
     </form>

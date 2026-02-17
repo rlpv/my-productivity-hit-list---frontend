@@ -23,7 +23,7 @@ const InputField: React.FC<InputFieldProps> = ({
   const displayPlaceholder = error ? error : placeholder;
 
   return (
-    <div className="w-full max-w-65 border border-black bg-gray-100 rounded-xl flex items-center px-3 sm:px-4 py-2 sm:py-3 my-2 sm:my-4 mx-auto">
+    <div className="w-full max-w-65 border-2 border-black bg-gray-100 rounded-xl flex items-center px-3 sm:px-4 py-2 sm:py-3 my-2 sm:my-4 mx-auto">
       <style>{`
         input[type="password"]::-webkit-credentials-auto-fill-button {
           display: none !important;

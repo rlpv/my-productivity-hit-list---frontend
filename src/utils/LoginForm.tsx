@@ -15,6 +15,7 @@ interface LoginFormProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
   onForgotPassword: () => void;
+  isLoading?: boolean;
 }
 
 export default function LoginForm({
@@ -23,6 +24,7 @@ export default function LoginForm({
   onChange,
   onSubmit,
   onForgotPassword,
+  isLoading = false,
 }: LoginFormProps) {
   return (
     <form onSubmit={onSubmit} className="flex flex-col items-center gap-6">
@@ -57,7 +59,7 @@ export default function LoginForm({
       />
 
       {/* Enter Button */}
-      <Button type="submit" size="md" variant="primary">
+      <Button type="submit" size="md" variant="primary" isLoading={isLoading}>
         Enter
       </Button>
 

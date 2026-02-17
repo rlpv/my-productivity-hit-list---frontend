@@ -7,15 +7,14 @@ import Button from "../components/buttons";
 import Concard from "../components/Concard";
 import HamburgerMenu from "../components/HamburgerMenu";
 import InputField from "../components/InputField";
-import SuccessModal from "../components/SuccessModal";
+import { useToast } from "../components/Toast";
 
 export default function ChangePass() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,41 +34,41 @@ export default function ChangePass() {
         setConfirmPassword(value);
         break;
     }
-    if (error) {
-      setError("");
-    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!currentPassword) {
-      setError("Current password is required");
+      showToast("Current password is required", "error");
       return;
     }
 
     if (!newPassword) {
-      setError("New password is required");
+      showToast("New password is required", "error");
       return;
     }
 
     if (!confirmPassword) {
-      setError("Please confirm your new password");
+      showToast("Please confirm your new password", "error");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError("New passwords don't match");
+      showToast("New passwords don't match", "error");
       return;
     }
 
     if (newPassword.length < 6) {
-      setError("New password must be at least 6 characters");
+      showToast("New password must be at least 6 characters", "error");
       return;
     }
 
     if (currentPassword === newPassword) {
-      setError("New password must be different from current password");
+      showToast(
+        "New password must be different from current password",
+        "error",
+      );
       return;
     }
 
@@ -80,8 +79,9 @@ export default function ChangePass() {
         currentPassword,
         newPassword,
       });
-      // Show success modal
-      setShowSuccessModal(true);
+      // Show success toast
+      showToast("Password changed successfully!", "success");
+      navigate("/homepage");
     } catch (err) {
       const axiosError = err as {
         response?: { data?: { message?: string } };
@@ -91,15 +91,10 @@ export default function ChangePass() {
         axiosError.response?.data?.message ||
         axiosError.message ||
         "Failed to change password";
-      setError(errorMessage);
+      showToast(errorMessage, "error");
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleModalClose = () => {
-    setShowSuccessModal(false);
-    navigate("/login");
   };
 
   const handleOpenMenu = () => {
@@ -163,7 +158,7 @@ export default function ChangePass() {
             placeholder="Current Password"
             value={currentPassword}
             onChange={(e) => handleChange(e, "current")}
-            error={error && !currentPassword ? error : ""}
+            error=""
           />
 
           {/* New Password Input */}
@@ -178,7 +173,7 @@ export default function ChangePass() {
             placeholder="New Password"
             value={newPassword}
             onChange={(e) => handleChange(e, "new")}
-            error={error && !newPassword ? error : ""}
+            error=""
           />
 
           {/* Confirm Password Input */}
@@ -193,34 +188,20 @@ export default function ChangePass() {
             placeholder="Confirm New Password"
             value={confirmPassword}
             onChange={(e) => handleChange(e, "confirm")}
-            error={error && !confirmPassword ? error : ""}
+            error=""
           />
-
-          {error && currentPassword && newPassword && confirmPassword && (
-            <p className="text-red-500 font-indie text-sm text-center">
-              {error}
-            </p>
-          )}
 
           {/* Submit Button */}
           <Button
             type="submit"
             size="md"
             variant="primary"
-            disabled={isLoading}
+            isLoading={isLoading}
           >
-            {isLoading ? "Changing..." : "Change Password"}
+            Change Password
           </Button>
         </form>
       </Concard>
-
-      {/* Success Modal for password change */}
-      <SuccessModal
-        isOpen={showSuccessModal}
-        onClose={handleModalClose}
-        title="Password Changed!"
-        message="Your password has been changed successfully."
-      />
 
       {/* Hamburger Menu */}
       <HamburgerMenu isOpen={isMenuOpen} onClose={handleCloseMenu} />

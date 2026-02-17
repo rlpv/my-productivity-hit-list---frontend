@@ -1,14 +1,20 @@
+import axios from "axios";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import logomain from "../assets/logomain.png";
 import Button from "../components/buttons";
 import Concard from "../components/Concard";
+import { useToast } from "../components/Toast";
 
 export default function VerifyCode() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [otp, setOtp] = useState(["", "", "", ""]);
-  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  // Get email from localStorage (stored when requesting OTP)
+  const email = localStorage.getItem("forgotPasswordEmail") || "";
 
   useEffect(() => {
     // Focus on first input on mount
@@ -23,7 +29,6 @@ export default function VerifyCode() {
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-    setError("");
 
     // Move to next input if value is entered
     if (value !== "" && index < 3) {
@@ -41,18 +46,41 @@ export default function VerifyCode() {
     }
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const otpCode = otp.join("");
 
     if (otpCode.length !== 4) {
-      setError("Please enter all 4 digits");
+      showToast("Please enter all 4 digits", "error");
       return;
     }
 
-    console.log("OTP Code:", otpCode);
-    // Navigate to setnewpass after successful verification
-    navigate("/setnewpass");
+    if (!email) {
+      showToast("Email not found. Please start over.", "error");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/users/verify-otp",
+        { email, otp: otpCode },
+      );
+
+      if (response.data.success) {
+        // Store the reset token
+        localStorage.setItem("resetToken", response.data.data.resetToken);
+        showToast("Verification successful!", "success");
+        navigate("/setnewpass");
+      }
+    } catch (err: unknown) {
+      const errorObj = err as { response?: { data?: { message?: string } } };
+      const message =
+        errorObj.response?.data?.message || "Invalid or expired code";
+      showToast(message, "error");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -96,11 +124,14 @@ export default function VerifyCode() {
             ))}
           </div>
 
-          {error && <p className="text-red-500 font-indie text-sm">{error}</p>}
-
           {/* Enter Button */}
-          <Button type="submit" size="md" variant="primary">
-            Enter
+          <Button
+            type="submit"
+            size="md"
+            variant="primary"
+            disabled={isLoading}
+          >
+            {isLoading ? "Verifying..." : "Enter"}
           </Button>
         </form>
       </Concard>

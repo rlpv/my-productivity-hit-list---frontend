@@ -4,10 +4,12 @@ import { useNavigate } from "react-router-dom";
 import logomain from "../assets/logomain.png";
 import axiosInstance from "../axios/axios-instance";
 import Concard from "../components/Concard";
+import { useToast } from "../components/Toast";
 import LoginForm from "../utils/LoginForm";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -17,7 +19,6 @@ export default function Login() {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [apiError, setApiError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -34,7 +35,6 @@ export default function Login() {
       password: formData.password ? "" : "Password is required",
     };
     setErrors(newErrors);
-    setApiError("");
 
     if (!newErrors.email && !newErrors.password) {
       setIsLoading(true);
@@ -46,6 +46,8 @@ export default function Login() {
         // Store user info and token in localStorage
         localStorage.setItem("user", JSON.stringify(response.data.data));
         localStorage.setItem("token", response.data.data.token);
+        // Show success toast
+        showToast("Login successful!", "success");
         // Navigate to homepage on successful login
         navigate("/homepage");
       } catch (error) {
@@ -71,7 +73,7 @@ export default function Login() {
             "Unable to connect to server. Please check if the backend is running.";
         }
 
-        setApiError(errorMessage);
+        showToast(errorMessage, "error");
       } finally {
         setIsLoading(false);
       }
@@ -109,23 +111,14 @@ export default function Login() {
           Login
         </h4>
 
-        {/* API Error Message */}
-        {apiError && (
-          <p className="text-red-500 text-sm mb-4 text-center">{apiError}</p>
-        )}
-
         <LoginForm
           formData={formData}
           errors={errors}
           onChange={handleChange}
           onSubmit={handleSubmit}
           onForgotPassword={handleForgotPassword}
+          isLoading={isLoading}
         />
-
-        {/* Loading indicator */}
-        {isLoading && (
-          <p className="text-black text-sm mt-4 text-center">Logging in...</p>
-        )}
       </Concard>
     </div>
   );
