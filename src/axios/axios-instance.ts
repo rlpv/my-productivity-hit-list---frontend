@@ -21,11 +21,13 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true, // Enable sending cookies
 });
 
-// Add request interceptor to include token
+// Add request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
+    // Token is in HttpOnly cookie (sent automatically), also check localStorage as backup
     const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

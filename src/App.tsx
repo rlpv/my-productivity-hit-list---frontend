@@ -1,72 +1,67 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ProtectedRoute from "./components/ProtectedRoute";
-import { ToastProvider } from "./components/Toast";
-import Addtask from "./pages/Addtask";
-import Changepass from "./pages/Changepass";
-import ChangepassVerify from "./pages/ChangepassVerify";
-import createaccount from "./pages/Createaccount";
-import Edittask from "./pages/Edittask";
-import ForgotPass from "./pages/Forgotpass";
-import Homepage from "./pages/Homepage";
-import Landingpage from "./pages/Landingpage";
-import login from "./pages/Login";
-import SetNewPass from "./pages/Setnewpass";
-import signup from "./pages/Signup";
-import TermsCond from "./pages/Termscond";
-import VerifyCode from "./pages/Verifycode";
+import { ToastProvider } from "./components/general/Toast";
+import ProtectedRoute from "./components/routing/ProtectedRoute";
+import Changepass from "./pages/auth/changepass/Changepass";
+import ChangepassVerify from "./pages/auth/changepass/ChangepassVerify";
+import VerifyCode from "./pages/auth/changepass/Verifycode";
+import ForgotPass from "./pages/auth/forgotpass/Forgotpass";
+import Login from "./pages/auth/login/Login";
+import Createaccount from "./pages/auth/register/Createaccount";
+import SetNewPass from "./pages/auth/setnewpass/Setnewpass";
+import Landingpage from "./pages/general/Landingpage";
+import Signup from "./pages/general/Signup";
+import TermsCond from "./pages/general/Termscond";
+import Addtask from "./pages/home/Addtask";
+import Edittask from "./pages/home/Edittask";
+import Homepage from "./pages/home/Homepage";
 
 function App() {
   const router = createBrowserRouter([
     // Public Routes - No authentication required
     {
       path: "/",
-      Component: Landingpage,
+      element: <Landingpage />,
     },
     {
       path: "/login",
-      Component: login,
+      element: <Login />,
     },
     {
       path: "/signup",
-      Component: signup,
-    },
-    {
-      path: "/forgotpass",
-      Component: ForgotPass,
-    },
-    {
-      path: "/verifycode",
-      Component: VerifyCode,
-    },
-    {
-      path: "/setnewpass",
-      Component: SetNewPass,
-    },
-    {
-      path: "/termscond",
-      Component: TermsCond,
+      element: <Signup />,
     },
     {
       path: "/createaccount",
-      Component: createaccount,
+      element: <Createaccount />,
     },
     {
-      path: "/changepassverify",
-      Component: ChangepassVerify,
+      path: "/terms",
+      element: <TermsCond />,
     },
-
-    // Protected Routes - Require authentication
+    {
+      path: "/forgot-password",
+      element: <ForgotPass />,
+    },
+    {
+      path: "/verify-code",
+      element: <VerifyCode />,
+    },
+    {
+      path: "/set-new-password",
+      element: <SetNewPass />,
+    },
+    // Protected Routes - Authentication required
     {
       path: "/homepage",
-      Component: () => (
+      element: (
         <ProtectedRoute>
           <Homepage />
         </ProtectedRoute>
       ),
     },
     {
-      path: "/addtask",
-      Component: () => (
+      path: "/add-task",
+      element: (
         <ProtectedRoute>
           <Addtask />
         </ProtectedRoute>
@@ -74,26 +69,33 @@ function App() {
     },
     {
       path: "/edittask/:id",
-      Component: () => (
+      element: (
         <ProtectedRoute>
           <Edittask />
         </ProtectedRoute>
       ),
     },
     {
-      path: "/changepass",
-      Component: () => (
+      path: "/change-password",
+      element: (
         <ProtectedRoute>
           <Changepass />
         </ProtectedRoute>
       ),
     },
+    {
+      path: "/change-password-verify",
+      element: (
+        <ProtectedRoute>
+          <ChangepassVerify />
+        </ProtectedRoute>
+      ),
+    },
   ]);
+
   return (
     <ToastProvider>
-      <div>
-        <RouterProvider router={router} />
-      </div>
+      <RouterProvider router={router} />
     </ToastProvider>
   );
 }

@@ -5,8 +5,13 @@
 // React Fast Refresh compatibility (ESLint: react-refresh/only-export-components)
 // ============================================================================
 
+// Note: Token is stored in both HttpOnly cookie AND localStorage
+// Cookie is used for main auth, localStorage as backup
 export interface UserData {
-  token: string;
+  _id?: string;
+  username?: string;
+  email?: string;
+  token?: string;
   expiresAt?: number; // Token expiration timestamp (Unix milliseconds)
   role?: "user" | "admin";
   // ... other user properties
@@ -27,14 +32,12 @@ export function isTokenExpired(user: UserData): boolean {
 // TOKEN & USER DATA HELPERS
 // ============================================================================
 export function getAuthToken(): string | null {
-  // Check localStorage first (current implementation)
+  // First try to get from localStorage (backup)
   const token = localStorage.getItem("token");
   if (token) return token;
 
-  // Future: Check HTTP-only cookie (requires backend support)
-  // const cookieToken = getCookie("authToken");
-  // return cookieToken;
-
+  // Token in HttpOnly cookie cannot be accessed by JavaScript
+  // Browser sends it automatically with requests
   return null;
 }
 
@@ -68,8 +71,7 @@ export function hasRequiredRole(
 export function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
-  // Future: Clear HTTP-only cookie
-  // deleteCookie("authToken");
+  // Cookie is cleared by backend API call in HamburgerMenu
   window.location.href = "/login";
 }
 
@@ -78,10 +80,12 @@ export function logout() {
 // ============================================================================
 // Check if user is currently logged in
 export function isLoggedIn(): boolean {
-  const token = getAuthToken();
+  // Check if user data exists in localStorage
+  // Token is in HttpOnly cookie and sent automatically with requests
+  // localStorage token is used as backup
   const user = getUserData();
 
-  if (!token || !user) return false;
+  if (!user) return false;
   if (isTokenExpired(user)) return false;
 
   return true;
