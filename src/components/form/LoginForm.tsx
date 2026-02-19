@@ -2,6 +2,7 @@ import InputField from "@/components/input/InputField";
 import SocialIcons from "@/components/social/SocialIcons";
 import Button from "@/components/ui/Button";
 import { FaEnvelope, FaLock } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 interface LoginFormProps {
   formData: {
@@ -26,8 +27,10 @@ export default function LoginForm({
   onForgotPassword,
   isLoading = false,
 }: LoginFormProps) {
+  const navigate = useNavigate();
+
   return (
-    <form onSubmit={onSubmit} className="flex flex-col items-center gap-6">
+    <form onSubmit={onSubmit} className="flex flex-col items-center gap-3">
       {/* Email Field */}
       <InputField
         icon={
@@ -77,6 +80,16 @@ export default function LoginForm({
 
       {/* Social Media Icons */}
       <SocialIcons />
+
+      {/* Link to Create Account */}
+      <button
+        type="button"
+        onClick={() => navigate("/createaccount")}
+        className="text-red-600 font-indie text-base underline hover:no-underline 
+          hover:text-red-700 transition-colors"
+      >
+        Go to create account?
+      </button>
     </form>
   );
 }

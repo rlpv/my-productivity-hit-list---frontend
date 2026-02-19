@@ -1,9 +1,9 @@
 import logomain from "@/assets/logomain.png";
+import axiosInstance from "@/axios/axios-instance";
 import AlertModal from "@/components/general/modals/AlertModal";
 import Concard from "@/components/home/task/Concard";
 import InputField from "@/components/input/InputField";
 import Button from "@/components/ui/Button";
-import axios from "axios";
 import { useState } from "react";
 import { FaEnvelope, FaReply } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -33,10 +33,9 @@ export default function ForgotPass() {
 
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/users/forgot-password",
-        { email },
-      );
+      const response = await axiosInstance.post("/users/forgot-password", {
+        email,
+      });
 
       if (response.data.success) {
         // Store email for verification page

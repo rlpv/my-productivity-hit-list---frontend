@@ -1,14 +1,9 @@
+import type { Task } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaPencilAlt, FaReply, FaTrashAlt } from "react-icons/fa";
 
 interface TaskModalProps {
-  task: {
-    _id: string;
-    title: string;
-    description: string;
-    completed: boolean;
-    createdAt: string;
-  } | null;
+  task: Task | null;
   isOpen: boolean;
   onClose: () => void;
   onEdit: (taskId: string) => void;
@@ -46,7 +41,7 @@ export default function TaskModal({
             <div className="p-6 pb-2 flex items-center justify-between">
               <button
                 onClick={onClose}
-                className="w-12 h-12 bg-[#D6DFFF] rounded-full border-[3px] border-black flex items-center justify-center hover:bg-gray-100 transition-all active:scale-90"
+                className="w-12 h-12 bg-secondary rounded-full border-[3px] border-black flex items-center justify-center hover:bg-gray-100 transition-all active:scale-90"
               >
                 <span className="transform -scale-x-100">
                   <FaReply size={20} />
@@ -63,7 +58,7 @@ export default function TaskModal({
                 <p className="font-indie font-bold text-lg ml-2">
                   Task title :
                 </p>
-                <div className="bg-[#D6DFFF] border-[3px] border-black rounded-[20px] p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
+                <div className="bg-primary border-[3px] border-black rounded-[20px] p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
                   <h3 className="text-xl font-bold font-indie wrap-break-word leading-tight">
                     {task.title}
                   </h3>
@@ -76,7 +71,7 @@ export default function TaskModal({
                   <p className="font-indie font-bold text-lg ml-2">
                     Task description :
                   </p>
-                  <div className="bg-[#D6DFFF] border-[3px] border-black rounded-[20px] p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] min-h-30">
+                  <div className="bg-primary border-[3px] border-black rounded-[20px] p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] min-h-30">
                     <p className="text-lg font-indie wrap-break-word leading-relaxed whitespace-pre-wrap text-center">
                       {task.description}
                     </p>

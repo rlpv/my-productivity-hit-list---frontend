@@ -12,7 +12,7 @@ const AnalyticsBox: React.FC<AnalyticsBoxProps> = ({ title, count }) => {
       {/* Outer Lavender Box */}
       <div className="w-22 h-22 bg-[#D6DFFF] border-2 border-black rounded-[20px] p-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center">
         {/* Inner White Box */}
-        <div className="w-full h-full bg-[#D6DFFF] border-2 border-black rounded-[15px] flex items-center justify-center">
+        <div className="w-full h-full bg-primary border-2 border-black rounded-[15px] flex items-center justify-center">
           <p className="text-5xl font-indie font-bold text-black">{count}</p>
         </div>
       </div>

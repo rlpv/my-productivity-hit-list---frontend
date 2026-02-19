@@ -1,73 +1,68 @@
-# React + TypeScript + Vite
+# Frontend - My Productivity Hit List
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React frontend for the Productivity Hit List application.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- **User Authentication** - Login, register, logout flows
+- **Task Management** - Create, edit, delete, complete tasks
+- **Task Analytics** - View completion statistics
+- **Responsive Design** - Works on desktop and mobile
+- **Toast Notifications** - Real-time user feedback
+- **Protected Routes** - Authenticated access to features
+- **Terms Acceptance** - Required acceptance before signup
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. **Install dependencies:**
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+   ```bash
+   npm install
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+2. **Create environment file:**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+   ```bash
+   cp .env.example .env
+   ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+3. **Configure environment variables:**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+   ```env
+   VITE_API_URL=http://localhost:5000/api
+   ```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+4. **Start development server:**
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## Modules
+
+| Module                                                            | Description                    |
+| ----------------------------------------------------------------- | ------------------------------ |
+| [`App.tsx`](src/App.tsx)                                          | Root component with routing    |
+| [`authStore.ts`](src/store/authStore.ts)                          | Authentication state (Zustand) |
+| [`taskStore.ts`](src/store/taskStore.ts)                          | Task state (Zustand)           |
+| [`axios-instance.ts`](src/axios/axios-instance.ts)                | Axios client with interceptors |
+| [`auth.api.ts`](src/api/auth.api.ts)                              | Auth API calls                 |
+| [`task.api.ts`](src/api/task.api.ts)                              | Task API calls                 |
+| [`ProtectedRoute.tsx`](src/components/routing/ProtectedRoute.tsx) | Auth guard component           |
+| [`Toast.tsx`](src/components/general/Toast.tsx)                   | Notification component         |
+
+---
+
+## Scripts
+
+```bash
+npm run dev      # Start Vite dev server
+npm run build    # Production build
+npm run lint     # ESLint
+npm run preview  # Preview production build
 ```

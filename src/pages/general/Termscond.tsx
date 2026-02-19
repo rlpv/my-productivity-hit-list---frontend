@@ -82,7 +82,7 @@ These Terms and Conditions are governed by applicable institutional or organizat
         </h4>
 
         {/* Terms Content */}
-        <div className="bg-[#D6DFFF] rounded-xl p-3 sm:p-4 w-full h-99 sm:h-80 overflow-y-auto">
+        <div className="bg-primary rounded-xl p-3 sm:p-4 w-full h-99 sm:h-80 overflow-y-auto">
           <p className="text-black font-indie text-xs sm:text-sm leading-relaxed text-center whitespace-pre-line">
             {termsContent}
           </p>

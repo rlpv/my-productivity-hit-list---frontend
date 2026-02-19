@@ -1,3 +1,8 @@
+// ============================================================================
+// TOAST COMPONENT - Toast notification provider and display
+// ============================================================================
+
+import type { Toast, ToastContextType } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   createContext,
@@ -7,23 +12,15 @@ import {
   type ReactNode,
 } from "react";
 
-interface Toast {
-  id: number;
-  message: string;
-  type: "success" | "error" | "info";
-}
-
-interface ToastContextType {
-  showToast: (message: string, type?: "success" | "error" | "info") => void;
-}
-
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 let toastId = 0;
 
+// Provider component that wraps the app and provides toast functionality
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
+  // Show a toast notification
   const showToast = useCallback(
     (message: string, type: "success" | "error" | "info" = "success") => {
       const id = ++toastId;
@@ -69,6 +66,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// Hook to access toast functionality from any component
 // eslint-disable-next-line react-refresh/only-export-components
 export function useToast() {
   const context = useContext(ToastContext);

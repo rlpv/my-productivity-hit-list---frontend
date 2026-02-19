@@ -1,11 +1,7 @@
+import type { Task } from "@/types";
+
 interface TaskItemProps {
-  task: {
-    _id: string;
-    title: string;
-    description: string;
-    completed: boolean;
-    createdAt: string;
-  };
+  task: Task;
   onClick: () => void;
   onToggleComplete: () => void;
 }

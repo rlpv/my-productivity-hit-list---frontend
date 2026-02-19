@@ -68,7 +68,6 @@ export default function Edittask({ onTaskSubmit }: EdittaskProps) {
     if (onTaskSubmit) {
       onTaskSubmit(task);
     }
-    console.log("Task Updated:", task);
     // Navigate back to Homepage after task update
     navigate("/homepage");
   };
@@ -88,7 +87,7 @@ export default function Edittask({ onTaskSubmit }: EdittaskProps) {
     <div className="flex flex-col h-screen">
       <Header onMenuClick={() => setMenuOpen(!menuOpen)} />
 
-      <main className="flex-1 bg-[#D6DFFF] p-4 relative">
+      <main className="flex-1 bg-primary p-4 relative">
         <div className="flex justify-between items-center gap-4 mb-6 mt-2">
           <div className="flex items-center gap-4">
             <div className="relative shrink-0 rotate-[-4deg]">

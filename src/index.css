@@ -16,6 +16,16 @@ body {
   font-family: "Indie Flower", cursive;
 }
 
+/* Password field autofill hiding */
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  display: none !important;
+}
+input[type="password"]::-ms-reveal,
+input[type="password"]::-webkit-outer-spin-button,
+input[type="password"]::-webkit-inner-spin-button {
+  display: none !important;
+}
+
 /* Toast animation */
 @keyframes slide-in {
   from {

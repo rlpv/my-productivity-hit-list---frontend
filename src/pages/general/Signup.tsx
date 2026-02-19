@@ -19,12 +19,8 @@ export default function Signup() {
       {/* White background rounded container with thick black border and shadow */}
       <Concard>
         <h4 className="text-black text-3xl sm:text-4xl font-indie font-bold">
-          Sign Up
+          Let's get to work
         </h4>
-
-        <Button size="md" variant="primary" onClick={() => navigate("/login")}>
-          Login
-        </Button>
 
         <Button
           size="md"
@@ -34,9 +30,13 @@ export default function Signup() {
           Create Account
         </Button>
 
+        <Button size="md" variant="primary" onClick={() => navigate("/login")}>
+          Login
+        </Button>
+
         <h4 className="text-black font-indie">
           <span className="block text-center">or</span>
-          <span className="block text-center">sign up with</span>
+          <span className="block text-center text-lg">sign up with</span>
         </h4>
         {/* Social Media Icons */}
         <SocialIcons />

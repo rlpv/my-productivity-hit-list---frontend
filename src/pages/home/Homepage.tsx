@@ -1,4 +1,4 @@
-import axiosInstance from "@/axios/axios-instance";
+import { ApiError, tasksApi } from "@/api";
 import DeleteConfirmModal from "@/components/general/modals/DeleteConfirmModal";
 import TaskModal from "@/components/general/modals/TaskModal";
 import { useToast } from "@/components/general/Toast";
@@ -6,51 +6,46 @@ import Header from "@/components/header/Header";
 import AddButton from "@/components/home/task/AddButton";
 import AnalyticsBox from "@/components/home/task/AnalyticsBox";
 import TaskList from "@/components/home/task/TaskList";
+import { useTaskStore } from "@/store/taskStore";
+import type { Task } from "@/types";
 import { useEffect, useState } from "react";
 import { FaClipboardList } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-interface Task {
-  _id: string;
-  title: string;
-  description: string;
-  completed: boolean;
-  createdAt: string;
-}
-
 export default function Homepage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const {
+    tasks,
+    isLoading,
+    error,
+    selectedTask,
+    setTasks,
+    setLoading,
+    setError,
+    setSelectedTask,
+    deleteTask,
+    updateTask,
+  } = useTaskStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchTasks();
-  }, []);
-
-  const fetchTasks = async () => {
-    try {
-      const response = await axiosInstance.get("/tasks");
-      setTasks(response.data.data);
-    } catch (err) {
-      const axiosError = err as {
-        response?: { data?: { message?: string } };
-        message?: string;
-      };
-      setError(
-        axiosError.response?.data?.message ||
-          axiosError.message ||
-          "Failed to fetch tasks",
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    (async () => {
+      try {
+        setLoading(true);
+        const response = await tasksApi.getAll();
+        setTasks(response.data.data);
+      } catch (err) {
+        const errorMessage =
+          err instanceof ApiError ? err.message : "Failed to fetch tasks";
+        setError(errorMessage);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [setLoading, setTasks, setError]);
 
   const handleAddClick = () => navigate("/add-task");
 
@@ -77,21 +72,14 @@ export default function Homepage() {
   const handleConfirmDelete = async () => {
     if (!taskToDelete) return;
     try {
-      await axiosInstance.delete(`/tasks/${taskToDelete}`);
-      setTasks(tasks.filter((task) => task._id !== taskToDelete));
+      await tasksApi.delete(taskToDelete);
+      deleteTask(taskToDelete);
       showToast("Task deleted successfully!", "success");
       handleCloseModal();
     } catch (err) {
-      const axiosError = err as {
-        response?: { data?: { message?: string } };
-        message?: string;
-      };
-      showToast(
-        axiosError.response?.data?.message ||
-          axiosError.message ||
-          "Failed to delete task",
-        "error",
-      );
+      const errorMessage =
+        err instanceof ApiError ? err.message : "Failed to delete task";
+      showToast(errorMessage, "error");
     } finally {
       setDeleteModalOpen(false);
       setTaskToDelete(null);
@@ -100,24 +88,14 @@ export default function Homepage() {
 
   const handleToggleComplete = async (task: Task) => {
     try {
-      await axiosInstance.put(`/tasks/${task._id}`, {
+      await tasksApi.update(task._id, {
         completed: !task.completed,
       });
-      setTasks(
-        tasks.map((t) =>
-          t._id === task._id ? { ...t, completed: !t.completed } : t,
-        ),
-      );
+      updateTask(task._id, { completed: !task.completed });
     } catch (err) {
-      const axiosError = err as {
-        response?: { data?: { message?: string } };
-        message?: string;
-      };
-      setError(
-        axiosError.response?.data?.message ||
-          axiosError.message ||
-          "Failed to update task",
-      );
+      const errorMessage =
+        err instanceof ApiError ? err.message : "Failed to update task";
+      setError(errorMessage);
     }
   };
 
@@ -146,7 +124,7 @@ export default function Homepage() {
             </div>
           </div>
 
-          <h1 className="font-indie text-3xl font-bold text-black leading-tight tracking-tight">
+          <h1 className="font-indie text-2xl font-bold text-black leading-tight tracking-tight">
             What should we do today?
           </h1>
         </div>

@@ -1,6 +1,7 @@
-import axiosInstance from "@/axios/axios-instance";
+import { ApiError, tasksApi } from "@/api";
 import { useToast } from "@/components/general/Toast";
 import Button from "@/components/ui/Button";
+import { useTaskStore } from "@/store/taskStore";
 import { useState, type FormEvent } from "react";
 
 interface TaskFormProps {
@@ -17,6 +18,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
   taskId,
 }) => {
   const { showToast } = useToast();
+  const { addTask, updateTask } = useTaskStore();
   const [taskTitle, setTaskTitle] = useState(initialValues?.title || "");
   const [taskDescription, setTaskDescription] = useState(
     initialValues?.description || "",
@@ -31,15 +33,22 @@ const TaskForm: React.FC<TaskFormProps> = ({
 
     try {
       if (isEdit && taskId) {
-        await axiosInstance.put(`/tasks/${taskId}`, {
+        await tasksApi.update(taskId, {
+          title: taskTitle,
+          description: taskDescription,
+        });
+        // Update store with the updated task
+        updateTask(taskId, {
           title: taskTitle,
           description: taskDescription,
         });
       } else {
-        await axiosInstance.post("/tasks", {
+        const newTask = await tasksApi.create({
           title: taskTitle,
           description: taskDescription,
         });
+        // Add the new task to store
+        addTask(newTask.data.data);
       }
 
       if (onSubmit) {
@@ -55,20 +64,15 @@ const TaskForm: React.FC<TaskFormProps> = ({
         setTaskTitle("");
         setTaskDescription("");
       }
-    } catch (err: unknown) {
-      const error = err as {
-        response?: { data?: { message?: string } };
-        message?: string;
-      };
-      setError(
-        error.response?.data?.message ||
-          error.message ||
-          (isEdit ? "Failed to update task" : "Failed to create task"),
-      );
-      showToast(
-        isEdit ? "Failed to update task" : "Failed to create task",
-        "error",
-      );
+    } catch (err) {
+      const errorMessage =
+        err instanceof ApiError
+          ? err.message
+          : isEdit
+            ? "Failed to update task"
+            : "Failed to create task";
+      setError(errorMessage);
+      showToast(errorMessage, "error");
     } finally {
       setIsLoading(false);
     }

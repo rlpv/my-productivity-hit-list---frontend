@@ -5,17 +5,10 @@
 // React Fast Refresh compatibility (ESLint: react-refresh/only-export-components)
 // ============================================================================
 
+import type { UserData } from "@/types";
+
 // Note: Token is stored in both HttpOnly cookie AND localStorage
 // Cookie is used for main auth, localStorage as backup
-export interface UserData {
-  _id?: string;
-  username?: string;
-  email?: string;
-  token?: string;
-  expiresAt?: number; // Token expiration timestamp (Unix milliseconds)
-  role?: "user" | "admin";
-  // ... other user properties
-}
 
 // ============================================================================
 // TOKEN EXPIRATION CHECK

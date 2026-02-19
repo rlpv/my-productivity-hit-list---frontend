@@ -1,15 +1,16 @@
 import logomain from "@/assets/logomain.png";
 import axiosInstance from "@/axios/axios-instance";
+import CreateaccountForm from "@/components/form/CreateaccountForm";
 import { useToast } from "@/components/general/Toast";
 import Concard from "@/components/home/task/Concard";
-import CreateaccountForm from "@/utils/forms/CreateaccountForm";
+import { useAuthStore } from "@/store/authStore";
 import { useEffect, useState } from "react";
-import { FaReply } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateAccount() {
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { login } = useAuthStore();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -67,6 +68,9 @@ export default function CreateAccount() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Prevent multiple submissions
+    if (isLoading) return;
+
     // Check terms acceptance first - show toast if not accepted
     if (!termsAccepted) {
       showToast("Please read and accept the Terms and Conditions", "error");
@@ -102,17 +106,25 @@ export default function CreateAccount() {
     ) {
       setIsLoading(true);
       try {
-        await axiosInstance.post("/users/register", {
+        const response = await axiosInstance.post("/users/register", {
           username: formData.username,
           email: formData.email,
           password: formData.password,
         });
 
-        // Show success toast
-        showToast("Account created successfully! Please log in.", "success");
-        // Clear form data from localStorage
-        localStorage.removeItem("createAccountFormData");
-        navigate("/login");
+        // Use store action to set auth state (also handles localStorage)
+        if (response.data.data && response.data.data.token) {
+          login(response.data.data, response.data.data.token);
+          showToast("Account created successfully!", "success");
+          // Clear form data from localStorage
+          localStorage.removeItem("createAccountFormData");
+          navigate("/homepage");
+        } else {
+          // If no token, redirect to login
+          showToast("Account created successfully! Please log in.", "success");
+          localStorage.removeItem("createAccountFormData");
+          navigate("/login");
+        }
       } catch (error) {
         // Type guard to check if it's an Axios error with response data
         const axiosError = error as {
@@ -149,17 +161,6 @@ export default function CreateAccount() {
 
   return (
     <div className="bg-secondary flex flex-col items-center relative min-h-screen gap-4 sm:gap-8 px-4">
-      <button
-        onClick={() => navigate("/signup")}
-        className="absolute top-4 right-4 w-12 h-12 bg-secondary
-               rounded-full border-[3px] border-black flex items-center justify-center
-                hover:bg-gray-100 transition-all active:scale-90"
-      >
-        <span className="transform -scale-x-100">
-          <FaReply size={20} />
-        </span>
-      </button>
-
       {/* Logo */}
       <img
         src={logomain}

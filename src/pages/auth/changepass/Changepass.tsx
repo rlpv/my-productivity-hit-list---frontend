@@ -5,6 +5,7 @@ import HamburgerMenu from "@/components/header/HamburgerMenu";
 import Concard from "@/components/home/task/Concard";
 import InputField from "@/components/input/InputField";
 import Button from "@/components/ui/Button";
+import { PasswordStrengthIndicator } from "@/utils/password";
 import { useState, type FormEvent } from "react";
 import { FaBars, FaKey, FaLock, FaReply } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -175,6 +176,11 @@ export default function ChangePass() {
             onChange={(e) => handleChange(e, "new")}
             error=""
           />
+
+          {/* Password Strength Indicator */}
+          <div className="w-full max-w-xs sm:max-w-sm">
+            <PasswordStrengthIndicator password={newPassword} />
+          </div>
 
           {/* Confirm Password Input */}
           <InputField

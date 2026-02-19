@@ -52,7 +52,6 @@ export default function ChangepassVerify() {
       return;
     }
 
-    console.log("Verification Code:", otpCode);
     // Show success modal after successful verification
     setShowSuccessModal(true);
   };

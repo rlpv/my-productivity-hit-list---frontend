@@ -1,9 +1,10 @@
 import logomain from "@/assets/logomain.png";
+import axiosInstance from "@/axios/axios-instance";
 import { useToast } from "@/components/general/Toast";
 import Concard from "@/components/home/task/Concard";
 import Button from "@/components/ui/Button";
-import axios from "axios";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { FaReply } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 export default function VerifyCode() {
@@ -25,6 +26,11 @@ export default function VerifyCode() {
 
   const handleChange = (index: number, value: string) => {
     if (value && isNaN(Number(value))) return;
+
+    // Only allow input if previous index is filled (sequential entry)
+    if (index > 0 && otp[index - 1] === "") {
+      return;
+    }
 
     const newOtp = [...otp];
     newOtp[index] = value;
@@ -62,10 +68,10 @@ export default function VerifyCode() {
 
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/users/verify-otp",
-        { email, otp: otpCode },
-      );
+      const response = await axiosInstance.post("/users/verify-otp", {
+        email,
+        otp: otpCode,
+      });
 
       if (response.data.success) {
         // Store the reset token
@@ -85,6 +91,16 @@ export default function VerifyCode() {
 
   return (
     <div className="bg-secondary flex flex-col items-center relative min-h-screen gap-4 sm:gap-8 px-4">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/forgot-password")}
+        className="absolute top-4 right-4 w-12 h-12 bg-secondary rounded-full border-[3px] border-black flex items-center justify-center hover:bg-gray-100 transition-all active:scale-90"
+      >
+        <span className="transform -scale-x-100">
+          <FaReply size={20} />
+        </span>
+      </button>
+
       {/* Logo */}
       <img
         src={logomain}
@@ -119,7 +135,9 @@ export default function VerifyCode() {
                 value={digit}
                 onChange={(e) => handleChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
-                className="w-10 sm:w-14 h-10 sm:h-14 text-center text-xl sm:text-2xl font-indie border-2 border-black bg-gray-100 rounded-xl outline-none focus:border-black focus:ring-2 focus:ring-black/20 transition-all"
+                className="w-10 sm:w-14 h-10 sm:h-14 text-center text-xl sm:text-2xl font-indie border-2
+                 border-black bg-gray-100 rounded-xl outline-none focus:border-black focus:ring-2
+                  focus:ring-black/20 transition-all"
               />
             ))}
           </div>

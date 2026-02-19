@@ -1,3 +1,7 @@
+// ============================================================================
+// BUTTON COMPONENT - Reusable button with loading state support
+// ============================================================================
+
 import React from "react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

@@ -1,42 +1,87 @@
+// ============================================================================
+// AXIOS INSTANCE - Centralized HTTP client configuration
+// ============================================================================
+
 import axios from "axios";
 
-// Get API URL from environment or use fallback
+// Get API URL from environment variables
 const getApiUrl = (): string => {
   const envUrl = import.meta.env.VITE_API_URL;
-  // Ensure we have a valid URL
   if (envUrl && typeof envUrl === "string" && envUrl.trim().length > 0) {
     return envUrl.trim();
   }
-  // Fallback to localhost
   return "http://localhost:5000";
 };
 
 const API_URL = getApiUrl();
 
-console.log("API URL:", API_URL); // Debug log
-
+// Create axios instance with default config
 const axiosInstance = axios.create({
   baseURL: `${API_URL}/api`,
   timeout: 300000,
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // Enable sending cookies
+  withCredentials: true,
 });
 
-// Add request interceptor
+// Add auth token to every request
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Token is in HttpOnly cookie (sent automatically), also check localStorage as backup
     const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    console.log("Request URL:", config.baseURL + (config.url || ""));
     return config;
   },
   (error) => {
     console.error("Request Error:", error);
+    return Promise.reject(error);
+  },
+);
+
+// Handle API errors globally
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      const { status, data } = error.response;
+
+      switch (status) {
+        case 401:
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          if (!window.location.pathname.includes("/login")) {
+            window.location.href = "/login";
+          }
+          break;
+        case 403:
+          console.error(
+            "Access forbidden:",
+            data?.message || "You don't have permission",
+          );
+          break;
+        case 404:
+          console.error(
+            "Resource not found:",
+            data?.message || "Requested resource not found",
+          );
+          break;
+        case 500:
+          console.error(
+            "Server error:",
+            data?.message || "Internal server error",
+          );
+          break;
+        default:
+          console.error("API Error:", data?.message || error.message);
+      }
+    } else if (error.request) {
+      console.error("Network Error: Unable to connect to server");
+    } else {
+      console.error("Error:", error.message);
+    }
+
     return Promise.reject(error);
   },
 );

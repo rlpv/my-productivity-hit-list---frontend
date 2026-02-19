@@ -1,7 +1,9 @@
 import InputField from "@/components/input/InputField";
 import SocialIcons from "@/components/social/SocialIcons";
 import Button from "@/components/ui/Button";
+import { getPasswordStrength } from "@/utils/password.utils";
 import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 interface CreateaccountFormProps {
   formData: {
@@ -25,30 +27,6 @@ interface CreateaccountFormProps {
   isLoading?: boolean;
 }
 
-// Password strength calculation function
-const getPasswordStrength = (
-  password: string,
-): { score: number; label: string; color: string } => {
-  let score = 0;
-
-  if (password.length >= 6) score++; // Score 1: At least 6 characters
-  if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++; // Score 2: Uppercase + Lowercase
-  if (/\d/.test(password)) score++; // Score 3: Numbers
-  if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++; // Score 4: Special characters
-
-  const strengthConfig = {
-    0: { label: "Very Weak", color: "bg-red-500" },
-    1: { label: "Weak", color: "bg-red-400" },
-    2: { label: "Fair", color: "bg-yellow-400" },
-    3: { label: "Good", color: "bg-blue-400" },
-    4: { label: "Strong", color: "bg-green-500" },
-  };
-
-  const config =
-    strengthConfig[score as keyof typeof strengthConfig] || strengthConfig[0];
-  return { score, ...config };
-};
-
 export default function CreateaccountForm({
   formData,
   errors,
@@ -59,10 +37,11 @@ export default function CreateaccountForm({
   onTermsClick,
   isLoading = false,
 }: CreateaccountFormProps) {
+  const navigate = useNavigate();
   const passwordStrength = getPasswordStrength(formData.password);
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col items-center gap-6">
+    <form onSubmit={onSubmit} className="flex flex-col items-center gap-1">
       {/* Username Field */}
       <InputField
         icon={
@@ -156,7 +135,7 @@ export default function CreateaccountForm({
               id="terms"
               checked={termsAccepted}
               onChange={(e) => onTermsChange(e.target.checked)}
-              className="w-4 h-4 accent-black cursor-pointer"
+              className="w-4 h-4 cursor-pointer accent-[#0a0a0a] border border-[#1a1a1a] rounded-sm"
               disabled
             />
             <span className="text-black font-indie text-sm">
@@ -183,6 +162,16 @@ export default function CreateaccountForm({
       </h4>
       {/* Social Media Icons */}
       <SocialIcons />
+
+      {/* Link to Login */}
+      <button
+        type="button"
+        onClick={() => navigate("/login")}
+        className="text-red-600 font-indie text-base underline hover:no-underline 
+          hover:text-red-700 transition-colors"
+      >
+        Go to login?
+      </button>
     </form>
   );
 }

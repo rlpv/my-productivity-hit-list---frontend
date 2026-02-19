@@ -1,21 +1,27 @@
+import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ToastProvider } from "./components/general/Toast";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 import Changepass from "./pages/auth/changepass/Changepass";
 import ChangepassVerify from "./pages/auth/changepass/ChangepassVerify";
-import VerifyCode from "./pages/auth/changepass/Verifycode";
 import ForgotPass from "./pages/auth/forgotpass/Forgotpass";
+import SetNewPass from "./pages/auth/forgotpass/Setnewpass";
+import VerifyCode from "./pages/auth/forgotpass/Verifycode";
 import Login from "./pages/auth/login/Login";
 import Createaccount from "./pages/auth/register/Createaccount";
-import SetNewPass from "./pages/auth/setnewpass/Setnewpass";
 import Landingpage from "./pages/general/Landingpage";
 import Signup from "./pages/general/Signup";
 import TermsCond from "./pages/general/Termscond";
 import Addtask from "./pages/home/Addtask";
 import Edittask from "./pages/home/Edittask";
 import Homepage from "./pages/home/Homepage";
+import { useAuthStore } from "./store/authStore";
 
 function App() {
+  // Initialize auth store from localStorage on app mount
+  useEffect(() => {
+    useAuthStore.getState().initialize();
+  }, []);
   const router = createBrowserRouter([
     // Public Routes - No authentication required
     {

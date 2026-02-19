@@ -1,9 +1,12 @@
 import logomain from "@/assets/logomain.png";
+import axiosInstance from "@/axios/axios-instance";
 import { useToast } from "@/components/general/Toast";
 import Concard from "@/components/home/task/Concard";
+import InputField from "@/components/input/InputField";
 import Button from "@/components/ui/Button";
-import axios from "axios";
+import { PasswordStrengthIndicator } from "@/utils/password";
 import { useState, type FormEvent } from "react";
+import { FaLock, FaReply } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 export default function SetNewPass() {
@@ -47,18 +50,10 @@ export default function SetNewPass() {
 
     setIsLoading(true);
     try {
-      console.log("=== SETNEWPASS DEBUG ===");
-      console.log("Token from localStorage:", resetToken);
-      console.log(
-        "Making request to:",
-        "http://localhost:5000/api/users/reset-password",
-      );
-      console.log("Request body:", { resetToken, newPassword: password });
-
-      const response = await axios.post(
-        "http://localhost:5000/api/users/reset-password",
-        { resetToken, newPassword: password },
-      );
+      const response = await axiosInstance.post("/users/reset-password", {
+        resetToken,
+        newPassword: password,
+      });
 
       if (response.data.success) {
         // Clear stored data
@@ -80,6 +75,16 @@ export default function SetNewPass() {
 
   return (
     <div className="bg-secondary flex flex-col items-center relative min-h-screen gap-4 sm:gap-8 px-4">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/verify-code")}
+        className="absolute top-4 right-4 w-12 h-12 bg-secondary rounded-full border-[3px] border-black flex items-center justify-center hover:bg-gray-100 transition-all active:scale-90"
+      >
+        <span className="transform -scale-x-100">
+          <FaReply size={20} />
+        </span>
+      </button>
+
       {/* Logo */}
       <img
         src={logomain}
@@ -102,28 +107,35 @@ export default function SetNewPass() {
           className="flex flex-col items-center gap-4 sm:gap-6"
         >
           {/* New Password Input */}
-          <div className="w-full">
-            <input
-              type="password"
-              placeholder="New Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 text-base sm:text-lg font-indie border-2 border-black
-               bg-gray-100 rounded-xl outline-none focus:border-black focus:ring-2 focus:ring-black/20 transition-all"
-            />
+          <InputField
+            icon={
+              <span className="text-gray-600">
+                <FaLock />
+              </span>
+            }
+            type="password"
+            placeholder="New Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          {/* Password Strength Indicator */}
+          <div className="w-full max-w-xs sm:max-w-sm">
+            <PasswordStrengthIndicator password={password} />
           </div>
 
           {/* Confirm Password Input */}
-          <div className="w-full">
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-4 py-3 text-base sm:text-lg font-indie border-2 border-black
-               bg-gray-100 rounded-xl outline-none focus:border-black focus:ring-2 focus:ring-black/20 transition-all"
-            />
-          </div>
+          <InputField
+            icon={
+              <span className="text-gray-600">
+                <FaLock />
+              </span>
+            }
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
 
           {/* Submit Button */}
           <Button
