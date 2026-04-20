@@ -13,7 +13,7 @@ function Landingpage() {
           onClick={() => navigate("/signup")}
           className="bg-white border border-black w-42.5 h-12.5 rounded-full font-indie text-xl shadow-lg shadow-black/10 hover:shadow-xl transition-shadow"
         >
-          Get started
+          Get started!
         </button>
       </div>
     </div>
