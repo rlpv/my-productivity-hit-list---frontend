@@ -47,7 +47,7 @@ export default function Addtask({ onTaskSubmit }: AddtaskProps) {
 
             {/* Reduced Header Text */}
             <h1 className="font-indie text-2xl font-bold text-black leading-tight tracking-tight">
-              Add Task
+              Add Task Here
             </h1>
           </div>
 
