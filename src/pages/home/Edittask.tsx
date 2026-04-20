@@ -110,7 +110,7 @@ export default function Edittask({ onTaskSubmit }: EdittaskProps) {
 
             {/* Reduced Header Text */}
             <h1 className="font-indie text-2xl font-bold text-black leading-tight tracking-tight">
-              Edit Task
+              Edit Task Here
             </h1>
           </div>
 
