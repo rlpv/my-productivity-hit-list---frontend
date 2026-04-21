@@ -125,7 +125,7 @@ export default function Homepage() {
           </div>
 
           <h1 className="font-indie text-2xl font-bold text-black leading-tight tracking-tight">
-            What should we do today??
+            What should we do today?
           </h1>
         </div>
 
